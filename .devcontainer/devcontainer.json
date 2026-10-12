@@ -1,0 +1,15 @@
+   {
+     "name": "energy-doc-intel",
+       "postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}",
+     "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+     "features": {
+       "ghcr.io/devcontainers/features/node:1": { "version": "lts" },
+       "ghcr.io/devcontainers/features/azure-cli:1": {},
+       "ghcr.io/devcontainers/features/github-cli:1": {}
+     },
+     "customizations": {
+       "vscode": {
+         "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+       }
+     }
+   }
