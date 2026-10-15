@@ -1,7 +1,8 @@
 node_modules/
 dist/
 data/
+.env
+.env.*
+!.env.example
+.azure/
 .DS_Store
-  .env.*
-   !.env.example
-   .azure/
