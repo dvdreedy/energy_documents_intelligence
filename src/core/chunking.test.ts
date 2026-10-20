@@ -81,6 +81,32 @@ describe("splitSections", () => {
     "Item 6. (Reserved)",
   ].join("\n");
 
+  it("recognizes the heading styles used by different companies", () => {
+    const headings = [
+      "ITEM 1.Business",
+      "Items 1 and 2. Business and Properties.",
+      "Item 6. [Reserved]",
+      "Item 7A. Quantitative and Qualitative Disclosures About Market Risk",
+    ];
+    const sections = splitSections(
+      headings.map((h) => `${h}\nSome text.`).join("\n"),
+    );
+    assert.deepEqual(
+      sections.map((s) => s.heading),
+      headings,
+    );
+  });
+
+  it("does not treat a quoted cross-reference as a heading", () => {
+    const sections = splitSections(
+      "Item 7. Management’s Discussion.\nItems 1 and 2. “Business and Properties—Regulation.”\nMore text.",
+    );
+    assert.deepEqual(
+      sections.map((s) => s.heading),
+      ["Item 7. Management’s Discussion."],
+    );
+  });
+
   it("splits at item headings, not table-of-contents rows, and keeps the cover page as its own section", () => {
     assert.deepEqual(
       splitSections(text).map((s) => s.heading),
