@@ -22,6 +22,22 @@ export interface Filing {
   file: string;
 }
 
+/**
+ * A passage of a filing small enough to embed and retrieve on its own.
+ * Carries what a citation needs, so an answer can point back to its source.
+ */
+export interface Chunk {
+  /** Unique and stable across runs, e.g. "HAL-2024-0042". */
+  id: string;
+  ticker: string;
+  company: string;
+  fiscalYear: number;
+  /** The 10-K item the passage is in, e.g. "Item 7. Management’s Discussion and Analysis…". */
+  section: string;
+  text: string;
+  sourceUrl: string;
+}
+
 /** A filing turned into text by a DocumentParser. */
 export interface ParsedDocument {
   filing: Filing;
