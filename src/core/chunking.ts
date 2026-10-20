@@ -12,11 +12,19 @@ export const DEFAULT_MAX_CHARS = 2000;
 const COVER_SECTION = "Cover page and table of contents";
 
 /**
- * A line that starts a 10-K item, e.g. "Item 1. Business." or "Item 1(a). Risk Factors."
- * (some companies write "Item 1A."). Real item headings are short standalone
- * lines, so long lines are treated as text that happens to mention an item.
+ * A line that starts a 10-K item. Companies write these differently:
+ *   "Item 1. Business."  "Item 1(a). Risk Factors."  "Item 1A. Risk Factors"
+ *   "ITEM 1.Business" (no space)  "Items 1 and 2. Business and Properties."
+ * The title must start with a letter or bracket, so cross-references such as
+ * Items 1 and 2. “Business and Properties—…” (opening quote) are not headings.
+ * Real item headings are short standalone lines, so long lines are treated as
+ * text that happens to mention an item.
  */
-const ITEM_HEADING = /^Item\s+\d+(?:\([a-c]\)|[A-C])?\.\s/i;
+const ITEM_NUMBER = String.raw`\d+(?:\([a-c]\)|[A-C])?`;
+const ITEM_HEADING = new RegExp(
+  String.raw`^Items?\s+${ITEM_NUMBER}\.?(?:\s+and\s+${ITEM_NUMBER})?\.\s*[A-Z([]`,
+  "i",
+);
 const MAX_HEADING_CHARS = 200;
 
 /** "PART I" … "PART IV" lines only group items, so they are dropped. */
