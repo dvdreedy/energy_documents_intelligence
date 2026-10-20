@@ -14,6 +14,7 @@ import { parseArgs } from "node:util";
 import { cacheFileFor } from "../src/adapters/docintel/document-intelligence-parser";
 import { PARSED_DIR, createParsing } from "../src/composition";
 import { loadConfig } from "../src/config";
+import { chunkDocument } from "../src/core/chunking";
 import {
   parseFilings,
   selectFilings,
@@ -74,8 +75,13 @@ async function main(): Promise<void> {
 
   await parseFilings(catalog, parser, selection, (document) => {
     const { ticker, fiscalYear } = document.filing;
+    // Chunk right away so chunk counts and sizes can be checked before indexing.
+    const chunks = chunkDocument(document);
+    const sections = new Set(chunks.map((c) => c.section)).size;
+    const characters = chunks.reduce((n, c) => n + c.text.length, 0);
     console.log(
-      `${ticker} ${fiscalYear}: ${document.markdown.length.toLocaleString()} characters of Markdown`,
+      `${ticker} ${fiscalYear}: ${document.markdown.length.toLocaleString()} characters of Markdown -> ` +
+        `${chunks.length} chunks in ${sections} sections, ${characters.toLocaleString()} characters after cleanup`,
     );
   });
 }
