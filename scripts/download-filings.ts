@@ -21,9 +21,9 @@ import {
   rawFileName,
   submissionsUrl,
   type CompanyTicker,
-  type FilingRef,
   type RecentFilings,
 } from "../src/adapters/edgar/filings";
+import type { Filing } from "../src/core/types";
 
 const TICKERS = ["CVX", "HAL", "PWR", "KMI"];
 const FILINGS_PER_COMPANY = 2;
@@ -34,16 +34,6 @@ const REQUEST_DELAY_MS = 200;
 
 interface Submissions {
   filings: { recent: RecentFilings };
-}
-
-interface ManifestEntry extends FilingRef {
-  ticker: string;
-  company: string;
-  cik: number;
-  form: string;
-  fiscalYear: number;
-  sourceUrl: string;
-  file: string;
 }
 
 function loadUserAgent(): string {
@@ -107,7 +97,7 @@ async function main(): Promise<void> {
     TICKERS_URL,
     userAgent,
   );
-  const manifest: ManifestEntry[] = [];
+  const manifest: Filing[] = [];
   let downloaded = 0;
   let skipped = 0;
 

@@ -10,7 +10,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm test",
-    "download": "tsx scripts/download-filings.ts"
+    "download": "tsx scripts/download-filings.ts",
+    "parse": "tsx scripts/parse-filings.ts"
   },
   "repository": {
     "type": "git",
@@ -33,5 +34,8 @@
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.71.2"
+  },
+  "dependencies": {
+    "@azure/identity": "^4.14.0"
   }
 }
