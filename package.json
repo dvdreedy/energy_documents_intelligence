@@ -1,8 +1,8 @@
 {
   "name": "energy_documents_intelligence",
   "version": "1.0.0",
-  "description": "Interface for energy documents",
-  "main": "index.js",
+  "description": "Question answering over energy-company 10-K filings on Azure, with citations and an evaluation harness",
+  "private": true,
   "scripts": {
     "test": "tsx --test \"src/**/*.test.ts\"",
     "typecheck": "tsc",
