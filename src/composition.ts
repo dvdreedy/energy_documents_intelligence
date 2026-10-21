@@ -5,12 +5,19 @@
 import path from "node:path";
 import { DefaultAzureCredential } from "@azure/identity";
 import { DocumentIntelligenceParser } from "./adapters/docintel/document-intelligence-parser";
+import { FoundryChatModel } from "./adapters/foundry/foundry-chat-model";
 import { FoundryEmbedder } from "./adapters/foundry/foundry-embedder";
 import { ManifestFilingCatalog } from "./adapters/fs/manifest-catalog";
 import { AzureSearchIndex } from "./adapters/search/azure-search-index";
 import type { Config } from "./config";
+import type { AnswerPorts } from "./core/answer";
 import type { IngestPorts } from "./core/ingest";
-import type { DocumentParser, FilingCatalog } from "./core/ports";
+import type {
+  DocumentParser,
+  Embedder,
+  FilingCatalog,
+  SearchIndex,
+} from "./core/ports";
 
 export const RAW_DIR = path.join("data", "raw");
 export const PARSED_DIR = path.join("data", "parsed");
@@ -36,9 +43,27 @@ export function createParsing(config: Config): Parsing {
 }
 
 export function createIngestion(config: Config): IngestPorts {
+  return { ...createParsing(config), ...createRetrieval(config) };
+}
+
+export function createAnswering(config: Config): AnswerPorts {
+  return {
+    ...createRetrieval(config),
+    chat: new FoundryChatModel({
+      endpoint: config.openAiEndpoint,
+      deployment: config.chatDeployment,
+      credential: new DefaultAzureCredential(),
+    }),
+  };
+}
+
+/** The embedder and index, shared by ingestion and answering. */
+function createRetrieval(config: Config): {
+  embedder: Embedder;
+  index: SearchIndex;
+} {
   const credential = new DefaultAzureCredential();
   return {
-    ...createParsing(config),
     embedder: new FoundryEmbedder({
       endpoint: config.openAiEndpoint,
       deployment: config.embeddingDeployment,

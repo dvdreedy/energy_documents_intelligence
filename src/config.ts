@@ -9,6 +9,7 @@ export interface Config {
   searchIndex: string;
   openAiEndpoint: string;
   embeddingDeployment: string;
+  chatDeployment: string;
 }
 
 /** Loads .env into process.env if the file exists, then parses the settings. */
@@ -30,6 +31,7 @@ export function parseConfig(env: Record<string, string | undefined>): Config {
     searchIndex: required(env, "AZURE_SEARCH_INDEX"),
     openAiEndpoint: httpsUrl(env, "AZURE_OPENAI_ENDPOINT"),
     embeddingDeployment: required(env, "AZURE_OPENAI_EMBEDDING_DEPLOYMENT"),
+    chatDeployment: required(env, "AZURE_OPENAI_CHAT_DEPLOYMENT"),
   };
 }
 
