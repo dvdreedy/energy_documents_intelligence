@@ -38,6 +38,25 @@ export interface Chunk {
   sourceUrl: string;
 }
 
+/**
+ * A group of users allowed to see a document, e.g. "public" or "finance".
+ * Search results are always filtered by the caller's groups (see SearchIndex).
+ */
+export type AccessGroup = string;
+
+/** A chunk ready to store in the search index: its embedding and who may see it. */
+export interface IndexedChunk {
+  chunk: Chunk;
+  vector: number[];
+  accessGroups: AccessGroup[];
+}
+
+/** One search result. Higher scores are better matches. */
+export interface SearchHit {
+  chunk: Chunk;
+  score: number;
+}
+
 /** A filing turned into text by a DocumentParser. */
 export interface ParsedDocument {
   filing: Filing;

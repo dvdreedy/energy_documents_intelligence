@@ -21,6 +21,7 @@ cp .env.example .env   # then fill in the endpoints and SEC_USER_AGENT
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | `npm run download`                          | Fetches the two latest 10-Ks per company from SEC EDGAR into `data/raw/` (free; needs `SEC_USER_AGENT`)              |
 | `npm run parse -- --ticker HAL --year 2024` | Parses filings with Document Intelligence into `data/parsed/`. Billed per page, so uncached filings need `--confirm` |
+| `npm run ingest`                            | Chunks parsed filings, embeds them and uploads them to the AI Search index. Dry run by default; `--confirm` to run   |
 | `npm run check`                             | Typecheck, lint, format check and unit tests (what CI runs)                                                          |
 
 ## Design
