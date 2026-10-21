@@ -27,6 +27,24 @@ const ITEM_HEADING = new RegExp(
 );
 const MAX_HEADING_CHARS = 200;
 
+/**
+ * Some companies (Chevron) answer Items 7 and 8 with "see the Financial
+ * Section" and print that section after Part III, where it would otherwise be
+ * labelled with whatever item came last (Item 14). These standalone lines
+ * start its parts, and are labelled with the item each part answers.
+ */
+const FINANCIAL_SECTION_HEADINGS: Array<{ line: RegExp; heading: string }> = [
+  {
+    line: /^Management[’']s Discussion and Analysis of Financial Condition and Results of Operations\.?$/i,
+    heading:
+      "Item 7. Management’s Discussion and Analysis of Financial Condition and Results of Operations",
+  },
+  {
+    line: /^Management[’']s Responsibility for Financial Statements\.?$/i,
+    heading: "Item 8. Financial Statements and Supplementary Data",
+  },
+];
+
 /** "PART I" … "PART IV" lines only group items, so they are dropped. */
 const PART_HEADING = /^PART\s+[IV]+\.?$/i;
 
@@ -111,9 +129,12 @@ export function splitSections(text: string): Section[] {
   for (const line of text.split("\n")) {
     const trimmed = line.trim();
     if (PART_HEADING.test(trimmed)) continue;
-    if (isItemHeading(trimmed)) {
+    const financialHeading = FINANCIAL_SECTION_HEADINGS.find((h) =>
+      h.line.test(trimmed),
+    )?.heading;
+    if (isItemHeading(trimmed) || financialHeading !== undefined) {
       finish();
-      heading = trimmed;
+      heading = financialHeading ?? trimmed;
       lines = [];
     } else {
       lines.push(line);

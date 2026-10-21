@@ -97,6 +97,33 @@ describe("splitSections", () => {
     );
   });
 
+  it("labels a financial section printed after Part III with Items 7 and 8", () => {
+    const sections = splitSections(
+      [
+        "Item 7. Management’s Discussion and Analysis.",
+        "See the Financial Section.",
+        "Item 14. Principal Accountant Fees and Services",
+        "Incorporated by reference.",
+        "Management’s Discussion and Analysis of Financial Condition and Results of Operations",
+        "Revenue grew.",
+        "Management’s Responsibility for Financial Statements",
+        "The statements are fair.",
+        "Item 15. Exhibits",
+        "List.",
+      ].join("\n"),
+    );
+    assert.deepEqual(
+      sections.map((s) => [s.heading.slice(0, 7), s.text]),
+      [
+        ["Item 7.", "See the Financial Section."],
+        ["Item 14", "Incorporated by reference."],
+        ["Item 7.", "Revenue grew."],
+        ["Item 8.", "The statements are fair."],
+        ["Item 15", "List."],
+      ],
+    );
+  });
+
   it("does not treat a quoted cross-reference as a heading", () => {
     const sections = splitSections(
       "Item 7. Management’s Discussion.\nItems 1 and 2. “Business and Properties—Regulation.”\nMore text.",
