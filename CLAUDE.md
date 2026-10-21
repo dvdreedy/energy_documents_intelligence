@@ -19,6 +19,7 @@ This is David Reedy's portfolio project for forward-deployed / senior engineerin
 - `npm run format`: fix formatting with Prettier
 - `npm run download`: fetch the latest 10-Ks from SEC EDGAR into `data/raw/` (needs `SEC_USER_AGENT` in `.env`)
 - `npm run parse -- --ticker HAL --year 2024`: parse filings with Document Intelligence into `data/parsed/`. Cached results are free; uncached filings are billed and need `--confirm` (ask David first)
+- `npm run ingest`: dry run of chunking, embedding and indexing (counts, estimated cost and index size). `--confirm` creates the search index if missing, embeds and uploads (changes Azure and spends a little: ask David first)
 
 ## Architecture: ports and adapters (see `docs/adr/0001-architecture.md`)
 

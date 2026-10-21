@@ -5,6 +5,10 @@
 
 export interface Config {
   docIntelEndpoint: string;
+  searchEndpoint: string;
+  searchIndex: string;
+  openAiEndpoint: string;
+  embeddingDeployment: string;
 }
 
 /** Loads .env into process.env if the file exists, then parses the settings. */
@@ -22,10 +26,14 @@ export function loadConfig(): Config {
 export function parseConfig(env: Record<string, string | undefined>): Config {
   return {
     docIntelEndpoint: httpsUrl(env, "AZURE_DOCINTEL_ENDPOINT"),
+    searchEndpoint: httpsUrl(env, "AZURE_SEARCH_ENDPOINT"),
+    searchIndex: required(env, "AZURE_SEARCH_INDEX"),
+    openAiEndpoint: httpsUrl(env, "AZURE_OPENAI_ENDPOINT"),
+    embeddingDeployment: required(env, "AZURE_OPENAI_EMBEDDING_DEPLOYMENT"),
   };
 }
 
-function httpsUrl(
+function required(
   env: Record<string, string | undefined>,
   name: string,
 ): string {
@@ -33,6 +41,14 @@ function httpsUrl(
   if (!value) {
     throw new Error(`Set ${name} in .env (see .env.example)`);
   }
+  return value;
+}
+
+function httpsUrl(
+  env: Record<string, string | undefined>,
+  name: string,
+): string {
+  const value = required(env, name);
   if (!URL.canParse(value) || new URL(value).protocol !== "https:") {
     throw new Error(`${name} must be an https:// URL, got "${value}"`);
   }
