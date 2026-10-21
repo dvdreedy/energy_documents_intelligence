@@ -57,6 +57,29 @@ export interface SearchHit {
   score: number;
 }
 
+/** One message in a chat with a language model. */
+export interface ChatMessage {
+  role: "system" | "user" | "assistant";
+  content: string;
+}
+
+/** Where a statement in an answer comes from. `marker` is the [n] in the answer text. */
+export interface Citation {
+  marker: number;
+  chunkId: string;
+  company: string;
+  ticker: string;
+  fiscalYear: number;
+  section: string;
+  sourceUrl: string;
+}
+
+export interface Answer {
+  text: string;
+  /** The sources the answer actually cites, in order of first mention. */
+  citations: Citation[];
+}
+
 /** A filing turned into text by a DocumentParser. */
 export interface ParsedDocument {
   filing: Filing;

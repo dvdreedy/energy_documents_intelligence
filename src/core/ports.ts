@@ -5,6 +5,7 @@
  */
 import type {
   AccessGroup,
+  ChatMessage,
   Filing,
   IndexedChunk,
   ParsedDocument,
@@ -47,4 +48,13 @@ export interface SearchIndex {
   /** Adds chunks, replacing any with the same id, so reruns do not duplicate. */
   upsert(chunks: IndexedChunk[]): Promise<void>;
   search(query: VectorQuery): Promise<SearchHit[]>;
+}
+
+/**
+ * A chat language model. Kept to one method so models are easy to swap and
+ * compare: gpt-5-mini now, Claude behind the same port in roadmap step 4.
+ */
+export interface ChatModel {
+  /** Returns the model's reply to the conversation so far. */
+  complete(messages: ChatMessage[]): Promise<string>;
 }

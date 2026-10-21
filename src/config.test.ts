@@ -8,6 +8,7 @@ const env = {
   AZURE_SEARCH_INDEX: "filings-v1",
   AZURE_OPENAI_ENDPOINT: "https://aif.example.com/",
   AZURE_OPENAI_EMBEDDING_DEPLOYMENT: "text-embedding-3-small",
+  AZURE_OPENAI_CHAT_DEPLOYMENT: "gpt-5-mini",
 };
 
 describe("parseConfig", () => {
@@ -18,6 +19,7 @@ describe("parseConfig", () => {
       searchIndex: "filings-v1",
       openAiEndpoint: "https://aif.example.com/",
       embeddingDeployment: "text-embedding-3-small",
+      chatDeployment: "gpt-5-mini",
     });
   });
 
